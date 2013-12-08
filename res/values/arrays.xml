@@ -23,29 +23,14 @@
         <item>1440</item>
     </string-array>
     <string-array name="currencies">
-        <item>USD</item>
-        <item>AUD</item>
-        <item>CAD</item>
-        <item>CHF</item>
-        <item>CNY</item>
-        <item>DKK</item>
-        <item>EUR</item>
-        <item>GBP</item>
-        <item>HKD</item>
-        <item>JPY</item>
-        <item>NZD</item>
-        <item>PLN</item>
-        <item>RUB</item>
-        <item>SEK</item>
-        <item>SGD</item>
-        <item>THB</item>
+        <item>BTC</item>
     </string-array>
     <string-array name="providerValues">
         <item>0</item>
         <item>1</item>
     </string-array>
     <string-array name="providers">
-        <item>MtGox</item>
-        <item>Coinbase</item>
+        <item>Cryptsy</item>
+        <item>Bter</item>
     </string-array>
 </resources>

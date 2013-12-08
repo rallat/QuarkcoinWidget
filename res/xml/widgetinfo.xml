@@ -8,5 +8,5 @@
     android:initialKeyguardLayout="@layout/widget_layout"
     android:resizeMode="none"
     android:previewImage="@drawable/widget_preview"
-    android:configure="com.brentpanther.bitcoinwidget.SettingsActivity"
+    android:configure="com.israelferrer.quarkcoinwidget.SettingsActivity"
   />

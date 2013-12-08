@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Simple Bitcoin Widget</string>
+    <string name="app_name">Quarkcoin Widget</string>
     <string name="loading">...</string>
     <string name="title_refresh_interval">Refresh Interval</string>
     <string name="title_currency">Currency</string>

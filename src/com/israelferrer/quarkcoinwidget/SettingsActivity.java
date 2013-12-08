@@ -1,4 +1,4 @@
-package com.brentpanther.bitcoinwidget;
+package com.israelferrer.quarkcoinwidget;
 
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;

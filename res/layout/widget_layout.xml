@@ -45,7 +45,7 @@
                 android:layout_marginLeft="3dp"
                 android:layout_marginRight="3dp"
                 android:layout_marginTop="5dp"
-                android:src="@drawable/icon_bitcoin" />
+                android:src="@drawable/quarkcoin" />
             
             <ImageView
                 android:visibility="gone"
@@ -57,7 +57,7 @@
                 android:layout_marginLeft="3dp"
                 android:layout_marginRight="3dp"
                 android:layout_marginTop="5dp"
-                android:src="@drawable/icon_bitcoin_bw" />
+                android:src="@drawable/quarkcoin" />
 
             <TextView
                 android:visibility="gone"
@@ -81,7 +81,7 @@
                 android:layout_marginRight="5dp"
                 android:textColor="#888"
                 android:textIsSelectable="false"
-                android:textSize="20dp"
+                android:textSize="15dp"
                 android:typeface="sans" />
         </LinearLayout>
     </LinearLayout>
