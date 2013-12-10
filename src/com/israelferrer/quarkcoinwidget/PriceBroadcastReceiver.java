@@ -30,20 +30,21 @@ public class PriceBroadcastReceiver extends BroadcastReceiver {
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
                 int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
                 RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
+                views.setViewVisibility(R.id.loading, View.VISIBLE);
+                views.setViewVisibility(R.id.bitcoinImage, View.GONE);
+                views.setViewVisibility(R.id.bitcoinValueSmall, View.GONE);
+                appWidgetManager.updateAppWidget(appWidgetId, views);
                 try {
                     String amount = getValue(context, appWidgetId, context.getString(R.string.default_currency));
                     Prefs.setLastUpdate(context);
-                    views.setViewVisibility(R.id.loading, View.GONE);
-                    views.setViewVisibility(R.id.bitcoinImage, View.VISIBLE);
                     views.setTextViewText(R.id.bitcoinValueSmall,"BTC "+amount);
-                    views.setViewVisibility(R.id.bitcoinValueSmall, View.VISIBLE);
                 } catch (Exception e) {
                     e.printStackTrace();
                     long lastUpdate = Prefs.getLastUpdate(context);
-                    //if its been "a while" since the last successful update, gray out the icon.
-                    boolean isOld = ((System.currentTimeMillis() - lastUpdate) > 1000 * 60 * 5);
                 }
-
+                views.setViewVisibility(R.id.loading, View.GONE);
+                views.setViewVisibility(R.id.bitcoinImage, View.VISIBLE);
+                views.setViewVisibility(R.id.bitcoinValueSmall, View.VISIBLE);
                 appWidgetManager.updateAppWidget(appWidgetId, views);
                 Intent priceUpdate = new Intent(context, PriceBroadcastReceiver.class);
                 priceUpdate.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
