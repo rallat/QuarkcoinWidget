@@ -23,7 +23,8 @@
         <item>1440</item>
     </string-array>
     <string-array name="currencies">
-        <item>BTC</item>
+        <item>USD</item>
+        <item>EUR</item>
     </string-array>
     <string-array name="providerValues">
         <item>0</item>

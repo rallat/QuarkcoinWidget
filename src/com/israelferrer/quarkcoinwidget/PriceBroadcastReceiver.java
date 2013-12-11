@@ -21,6 +21,7 @@ public class PriceBroadcastReceiver extends BroadcastReceiver {
 
     private static final String CRYPTSY = "http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=71";
     private static final String BTER = "https://bter.com/api/1/ticker/qrk_btc";
+    private static final String COINBASE = "https://coinbase.com/api/v1/prices/spot_rate?currency=";
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
@@ -31,20 +32,30 @@ public class PriceBroadcastReceiver extends BroadcastReceiver {
                 int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
                 RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
                 views.setViewVisibility(R.id.loading, View.VISIBLE);
-                views.setViewVisibility(R.id.bitcoinImage, View.GONE);
-                views.setViewVisibility(R.id.bitcoinValueSmall, View.GONE);
+                views.setViewVisibility(R.id.quarkcoinImage, View.GONE);
+                views.setViewVisibility(R.id.quarkValueInBtc, View.GONE);
+                views.setViewVisibility(R.id.quarkValueInCurrency, View.GONE);
                 appWidgetManager.updateAppWidget(appWidgetId, views);
+                String currency=Prefs.getCurrency(context, appWidgetId);
+                if("BTC".equals(currency)){
+                     currency ="USD";
+                }
+
                 try {
-                    String amount = getValue(context, appWidgetId, context.getString(R.string.default_currency));
+                    String amount = getQuarkValue(context, appWidgetId);
+                    String btcValue = getBTCValue(currency);
+                    NumberFormat formatter = new DecimalFormat("#.00");
                     Prefs.setLastUpdate(context);
-                    views.setTextViewText(R.id.bitcoinValueSmall,"BTC "+amount);
+                    views.setTextViewText(R.id.quarkValueInBtc, "BTC" + amount);
+                    views.setTextViewText(R.id.quarkValueInCurrency, currency + formatter.format((Float.valueOf(btcValue) * Float.valueOf(amount))));
                 } catch (Exception e) {
                     e.printStackTrace();
                     long lastUpdate = Prefs.getLastUpdate(context);
                 }
                 views.setViewVisibility(R.id.loading, View.GONE);
-                views.setViewVisibility(R.id.bitcoinImage, View.VISIBLE);
-                views.setViewVisibility(R.id.bitcoinValueSmall, View.VISIBLE);
+                views.setViewVisibility(R.id.quarkcoinImage, View.VISIBLE);
+                views.setViewVisibility(R.id.quarkValueInBtc, View.VISIBLE);
+                views.setViewVisibility(R.id.quarkValueInCurrency, View.VISIBLE);
                 appWidgetManager.updateAppWidget(appWidgetId, views);
                 Intent priceUpdate = new Intent(context, PriceBroadcastReceiver.class);
                 priceUpdate.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
@@ -55,17 +66,23 @@ public class PriceBroadcastReceiver extends BroadcastReceiver {
         }).start();
     }
 
-    private String getValue(Context context, int widgetId, String currencyCode) throws Exception {
+    private String getQuarkValue(Context context, int widgetId) throws Exception {
         int provider = Prefs.getProvider(context, widgetId);
+        String value = "0";
         if (provider == 0) {
             JSONObject obj = getAmount(CRYPTSY);
-            return obj.getJSONObject("return").getJSONObject("markets").getJSONObject("QRK").getString("lasttradeprice");
+            value = obj.getJSONObject("return").getJSONObject("markets").getJSONObject("QRK").getString("lasttradeprice");
         } else if (provider == 1) {
             JSONObject obj = getAmount(BTER);
-            NumberFormat formatter = new DecimalFormat("#0.000000000");
-            return String.valueOf(formatter.format(obj.getDouble("last")));
+            value = obj.getString("last");
         }
-        return null;
+        NumberFormat formatter = new DecimalFormat("#.000000");
+        return formatter.format(Double.valueOf(value));
+    }
+
+    private String getBTCValue(String currency) throws Exception {
+        JSONObject obj = getAmount(COINBASE + currency);
+        return obj.getString("amount");
     }
 
     private JSONObject getAmount(String url) throws Exception {
